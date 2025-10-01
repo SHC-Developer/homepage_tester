@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "echo 'Push main to deploy. Output in docs/'",
+    "archive:docs": "tar -czf build-docs.tar.gz -C docs .",
     "test": "echo \"No tests\" && exit 0"
   },
   "dependencies": {
