@@ -13,6 +13,9 @@
     "predeploy": "npm run build",
     "deploy": "echo 'Push main to deploy. Output in docs/'",
     "archive:docs": "tar -czf build-docs.tar.gz -C docs .",
+    "compat:dist": "rm -rf dist && mkdir -p dist && cp -R docs/. dist/",
+    "build:compat": "npm run build && npm run compat:dist",
+    "archive:dist": "tar -czf build-dist.tar.gz -C dist .",
     "test": "echo \"No tests\" && exit 0"
   },
   "dependencies": {
