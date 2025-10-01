@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0; URL=/homepage_tester/?p=/%2F" />
+    <script>
+      (function() {
+        var l = window.location;
+        var repoBase = '/homepage_tester';
+        var redirect = repoBase + '/?p=' + encodeURIComponent(l.pathname + l.search + l.hash);
+        l.replace(redirect);
+      })();
+    </script>
+  </head>
+  <body>
+    Redirecting to the application...
+  </body>
+</html>
+
+
