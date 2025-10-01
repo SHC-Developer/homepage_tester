@@ -1,0 +1,69 @@
+# 워크플로우의 이름
+name: Deploy to GitHub Pages
+
+# 언제 이 워크플로우를 실행할지 결정하는 트리거 설정
+on:
+  # 'main' 브랜치에 push 이벤트가 발생했을 때 실행
+  push:
+    branches:
+      - main
+  # Actions 탭에서 수동으로 실행할 수도 있게 함
+  workflow_dispatch:
+
+# 워크플로우에 필요한 권한 설정
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 동시에 여러 워크플로우가 실행되는 것을 방지
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+# 실제 작업을 정의하는 잡(job)
+jobs:
+  # 'deploy' 라는 이름의 잡
+  deploy:
+    # GitHub Pages 배포 환경 설정
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # 잡이 실행될 가상 머신 환경 (최신 우분투)
+    runs-on: ubuntu-latest
+    # 잡이 수행할 단계(step)들
+    steps:
+      # 1. 저장소 코드 체크아웃 (가상 머신으로 코드 가져오기)
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Node.js 환경 설정
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # 사용하는 Node.js 버전에 맞게 변경 가능
+          cache: 'npm'
+
+      # 3. 프로젝트 의존성(dependencies) 설치
+      - name: Install dependencies
+        run: npm install
+
+      # 4. 프로젝트 빌드 (vite.config.ts의 base 설정을 따름)
+      - name: Build
+        run: npm run build
+
+      # 5. GitHub Pages를 위한 설정
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # 6. 빌드 결과물(artifact) 업로드
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # 'dist' 폴더에 있는 빌드 결과물을 업로드
+          path: './dist'
+
+      # 7. GitHub Pages에 배포
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
