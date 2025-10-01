@@ -4,7 +4,7 @@ import path from "path";
 import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig({
-  base: "/homepage_tester/",   // 반드시 repo 이름!
+  base: "", 
   plugins: [react()],
   resolve: {
     alias: {
